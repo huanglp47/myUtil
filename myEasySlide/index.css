@@ -1,0 +1,63 @@
+
+.container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.silder-ul {
+    overflow: hidden;
+    height: 167px;
+    position: relative;
+}
+
+.item {
+    width: 375px;
+    height: 165px;
+    float: left;
+    position: absolute;
+}
+
+.item:nth-child(1) {
+    border: 1px solid red;
+}
+
+.item:nth-child(2) {
+    border: 1px solid pink;
+}
+
+.item:nth-child(3) {
+    border: 1px solid skyblue;
+}
+
+.item:nth-child(4) {
+    border: 1px solid red;
+}
+
+.silder-ul a {
+    display: block;
+}
+
+.dot {
+    position: absolute;
+    bottom: 0;
+    left: 50px;
+    padding: 12px 0;
+}
+
+.dot li {
+    float: left;
+    width: 6px;
+    height: 6px;
+    border-radius: 6px;
+    background: #c5c5c7;
+    margin-right: 8px;
+}
+
+.dot li.active {
+    background: #4998e7;
+}
+
+.dot {
+    display: none\0;
+}
