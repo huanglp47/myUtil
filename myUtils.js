@@ -81,7 +81,7 @@ NB.namespace('base');
     NB.base.extend(NB.base, {
 
         /**
-         * 类型检验 （统一调用方法）
+         * 类型检验 （统一调用方法）闭包，函数curry化
          * 使用：var isNumber = isType('Number'),
          *           isArray = Array.isArray || isType('Array'),
          *           isObject = isType('Object');
@@ -116,11 +116,6 @@ NB.namespace('base');
         //update: obj allows all unkonw type
         //learn from underscore.js
         isEmptyObj: function(obj) {
-            //must be object
-            // if (!isObject(obj)) {
-            //     console.log("arguments must be object")
-            //     return;
-            // };
             if (obj == null) {
                 return true
             }
@@ -144,16 +139,59 @@ NB.namespace('base');
             }
         },
 
-        //encodeURI的另一种用法
-        // encodeing('这是中文');
-        encodeing: function(str) {
-            var a = document.createElement('a');
-            var _url =
-                a.href = "/?q=" + str;
-            var url = a.href; //读取时自动编码
-            a.href = "/?q=";
-            return url.replace(a.href, '');
+
+        // 解析url查询字符
+        // '?aa=11&ss=2' => '{aa:11, ss=2}'
+        parseUrl: function(str) {
+            str = decodeURI(str);
+            var result = {},
+                reg = /([^?#=&]+)=([^&]+)/ig,
+                match;
+            while ((match = reg.exec(str)) != null) {
+                result[match[1]] = match[2];
+            }
+            return result;
+        },
+
+        // 常规版本 解析url查询字符
+        parseUrl1: function(str) {
+            str = decodeURI(str);
+            var search = str.split('?')[1],
+                params = search.split('&') || [],
+                result = {},
+                arr = []; //存放键值数组
+            for (var i = 0, len = params.length; i < len; i++) {
+                arr = params[i].split('=');
+                if (!result[arr[0]]) {
+                    result[arr[0]] = arr[1];
+                }
+            }
+            return result
+        },
+
+        // 获取对象长度
+        // var obj = {
+        //     'aa': '122',
+        //     'ss': '232334'
+        // };
+        // var aa = getObjLength(obj);
+        // console.log(aa);
+        getObjLength: function(obj) {
+            if (this.isObject(obj)) {
+                if (Object.keys(obj)) {
+                    return Object.keys(obj).length;
+                } else {
+                    var arr = [];
+                    for (var i in obj) {
+                        if (obj.hasOwnProperty(i)) {
+                            arr.push(i);
+                        };
+                    }
+                    return arr.length
+                }
+            }
         }
+        
     });
 
     /**
