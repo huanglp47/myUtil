@@ -35,6 +35,15 @@ NB.namespace('base');
      * @param {object} object 对象
      * @return {bool} 是/否
      */
+     
+     /* 其他方法1.
+     *  var a = { n: {name:'whatever'} }; 
+     *  var b = JSON.parse( JSON.stringify(a) );
+     */
+     /* 其他方法2.
+     *  var a = { n: {name:'whatever'} }; 
+     *  var b = Object.create(a);
+     */
     NB.base.extend = function(destination, source) {
         if (destination == null) {
             destination = source
