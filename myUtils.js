@@ -44,6 +44,10 @@ NB.namespace('base');
      *  var a = { n: {name:'whatever'} }; 
      *  var b = Object.create(a);
      */
+     /*
+     * 其他方法3
+     * 通过prototype原型进行寄生组合继承...
+     */
     NB.base.extend = function(destination, source) {
         if (destination == null) {
             destination = source
