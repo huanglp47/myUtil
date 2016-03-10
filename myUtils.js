@@ -40,15 +40,15 @@ NB.namespace('base');
             destination = source
         } else {
             for (var property in source) {
-                if (getParamType(source[property]).toLowerCase() === "object" &&
-                    getParamType(destination[property]).toLowerCase() === "object") {
-                    extend(destination[property], source[property])
+                if (getParamType(source[property]).toLowerCase() === "object" ||
+                    getParamType(source[property]).toLowerCase() === "array") {
+                        destination[property] = getParamType(source[property]).toLowerCase() === "object" ?{}:[];
+                        extend(destination[property], source[property])
                 } else {
                     destination[property] = source[property];
                 }
             }
         }
-        return destination;
     };
 
     /**
