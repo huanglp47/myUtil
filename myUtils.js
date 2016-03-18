@@ -56,7 +56,7 @@ NB.namespace('base');
                 if (getParamType(source[property]).toLowerCase() === "object" ||
                     getParamType(source[property]).toLowerCase() === "array") {
                         destination[property] = getParamType(source[property]).toLowerCase() === "object" ?{}:[];
-                        extend(destination[property], source[property])
+                        extend(destination[property], source[property]);
                 } else {
                     destination[property] = source[property];
                 }
@@ -352,9 +352,10 @@ NB.string = {
     // 简易版
     toLowerCaseFirstLetter: function(a) {
         return a.charAt(0).toLowerCase() + a.substring(1, a.length);
+        // or
+        //return a.charAt(0).toLowerCase() + a.slice(1);
     }
-
-}
+};
 
 NB.namespace('cookie');
 
@@ -419,6 +420,15 @@ NB.namespace('number');
     }
 
 })();
+
+NB.namespace('json');
+
+//json方法拓展 2016-03-18
+NB.json.extend(NB.json, {
+    parse: function(str){
+        return $.parseJSON(str);
+    }
+});
 
 
 NB.namespace('event');
