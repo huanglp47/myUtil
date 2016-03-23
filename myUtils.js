@@ -35,16 +35,16 @@ NB.namespace('base');
      * @param {object} object 对象
      * @return {bool} 是/否
      */
-     
-     /* 其他方法1.
+
+    /* 其他方法1.
      *  var a = { n: {name:'whatever'} }; 
      *  var b = JSON.parse( JSON.stringify(a) );
      */
-     /* 其他方法2.
+    /* 其他方法2.
      *  var a = { n: {name:'whatever'} }; 
      *  var b = Object.create(a);
      */
-     /*
+    /*
      * 其他方法3
      * 通过prototype原型进行寄生组合继承...
      */
@@ -55,8 +55,8 @@ NB.namespace('base');
             for (var property in source) {
                 if (getParamType(source[property]).toLowerCase() === "object" ||
                     getParamType(source[property]).toLowerCase() === "array") {
-                        destination[property] = getParamType(source[property]).toLowerCase() === "object" ?{}:[];
-                        extend(destination[property], source[property]);
+                    destination[property] = getParamType(source[property]).toLowerCase() === "object" ? {} : [];
+                    extend(destination[property], source[property]);
                 } else {
                     destination[property] = source[property];
                 }
@@ -204,7 +204,7 @@ NB.namespace('base');
                 }
             }
         }
-        
+
     });
 
     /**
@@ -332,6 +332,7 @@ NB.string = {
     trim: function(str) {
         return str.replace(/(^\s*)|(\s*$)/g, "");
     },
+
     //是否小写英文
     isLowerCase: function(str) {
         return /^[a-z]+$/.test(str)
@@ -354,6 +355,25 @@ NB.string = {
         return a.charAt(0).toLowerCase() + a.substring(1, a.length);
         // or
         //return a.charAt(0).toLowerCase() + a.slice(1);
+    },
+
+    //html字符转义
+    // '<html><script>alert(1233);</script></html>\ndfgfhgfhgfh\n5657675\ndfgfdgfgfg'
+    encodeHtml: function(str) {
+        if (typeof str != 'string') {
+            return str;
+        }
+        var entityMap = {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            "'": "&#39;",
+            '"': "&quot;",
+            "/": "&#x2F;"
+        };
+        return str.replace(reg, function(i) {
+            return entityMap[i];
+        });
     }
 };
 
@@ -425,7 +445,7 @@ NB.namespace('json');
 
 //json方法拓展 2016-03-18
 NB.json.extend(NB.json, {
-    parse: function(str){
+    parse: function(str) {
         return $.parseJSON(str);
     }
 });
