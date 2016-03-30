@@ -402,17 +402,22 @@ NB.namespace('date');
         // },
 
         //增强版
-        getFormatTime: function(split) {
-            var d = new Date(),
-                year = isbelowTen(d.getFullYear()),
-                month = isbelowTen(d.getMonth() + 1),
-                day = isbelowTen(d.getDate()),
-                hour = isbelowTen(d.getHours()),
-                minute = isbelowTen(d.getMinutes()),
-                second = isbelowTen(d.getSeconds());
+        getFormatTime: function(split,day) {
             var str = split ? split : '-';
-            var dd = year + str + month + str + day + " " + hour + ":" + minute + ":" + second;
-            return dd
+            var d = new Date(),
+            	year = this.isBelowTen(d.getFullYear()),
+                month = this.isBelowTen(d.getMonth() + 1),
+                day = this.isBelowTen(d.getDate()),
+                hour = this.isBelowTen(d.getHours()),
+                minute = this.isBelowTen(d.getMinutes()),
+                second = this.isBelowTen(d.getSeconds());
+            var result = null;
+            if(day){
+            	result = year + str + month + str + day;
+            }else{
+            	result = year + str + month + str + day + " " + hour + ":" + minute + ":" + second;
+            }    
+            return result;
         },
 
         // 时间数字低于10补0，如：9转化为09
