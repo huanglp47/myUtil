@@ -1,7 +1,7 @@
 /**
  * 全局命名空间对象下挂载方法
  * @date 2015-06-08
- * UpDate 2015-10
+ * UpDate 2016-04-07
  * @author Lipeng Wong
  */
 
@@ -10,6 +10,7 @@
  * @param {string} 空间名称，可多个 
  * @return {object} 对象
  */
+
 var NB = {
     namespace: function(ns) {
         var parts = ns.split('.'),
@@ -232,7 +233,8 @@ NB.base.extend(window, NB.base);
 //     errorFn: function(){}    
 // };
 NB.namespace('ajaxMethod');
-NB.ajaxMethod = function(options) {
+
+NB.ajax = function(options) {
     if (!options || typeof options != 'object') {
         return
     }
@@ -390,12 +392,12 @@ NB.namespace('date');
 
         // getFormatTime: function() {
         //     var d = new Date();
-        //     var year = isbelowTen(d.getFullYear());
-        //     var month = isbelowTen(d.getMonth() + 1);
-        //     var day = isbelowTen(d.getDate());
-        //     var hour = isbelowTen(d.getHours());
-        //     var minute = isbelowTen(d.getMinutes());
-        //     var second = isbelowTen(d.getSeconds());
+        //     var year = this.isBelowTen(d.getFullYear());
+        //     var month = this.isBelowTen(d.getMonth() + 1);
+        //     var day = this.isBelowTen(d.getDate());
+        //     var hour = this.isBelowTen(d.getHours());
+        //     var minute = this.isBelowTen(d.getMinutes());
+        //     var second = this.isBelowTen(d.getSeconds());
 
         //     var dd = year + '' + month + day + hour + minute + second;
         //     return dd
@@ -473,7 +475,7 @@ NB.namespace('number');
 
 NB.namespace('json');
 
-//json方法拓展 2016-03-18
+//json方法拓展 2016-03-18 //
 NB.json.extend(NB.json, {
     parse: function(str) {
         return $.parseJSON(str);
@@ -492,7 +494,14 @@ NB.namespace('widget');
 (function() {
 
     NB.widget = {
-        gotoTop: function() {}
+        
+        // @param {number} time为时间间隔
+        gotoTop: function(time) {
+            $('html,body').animate({
+                scrollTop: '0px'
+            }, time-0);
+        }
+
     }
 
 })();
