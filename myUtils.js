@@ -401,23 +401,48 @@ NB.namespace('date');
         //     return dd
         // },
 
-        //增强版
-        getFormatTime: function(split,day) {
-            var str = split ? split : '-';
-            var d = new Date(),
-            	year = this.isBelowTen(d.getFullYear()),
+        /**
+         * 格式化时间
+         * @param {string} split 分隔符
+         * @param {boolean} days 是否只返回年月日
+         * @param {string} time 时间戳
+         * @return {string} 时间 '20160401'or '201604011200'...
+         */
+        getFormatTime: function(split, days, time) {
+            var str = split ? split : '';
+            var d = (time && new Date(time)) || new Date(),
+                year = this.isBelowTen(d.getFullYear()),
                 month = this.isBelowTen(d.getMonth() + 1),
                 day = this.isBelowTen(d.getDate()),
                 hour = this.isBelowTen(d.getHours()),
                 minute = this.isBelowTen(d.getMinutes()),
                 second = this.isBelowTen(d.getSeconds());
             var result = null;
-            if(day){
-            	result = year + str + month + str + day;
-            }else{
-            	result = year + str + month + str + day + " " + hour + ":" + minute + ":" + second;
-            }    
+            if (days) {
+                result = year + str + month + str + day;
+            } else {
+                result = year + str + month + str + day + " " + hour + ":" + minute + ":" + second;
+            }
             return result;
+        },
+        
+        //根据日期获取前N天(默认7天)，time时间戳 n表示提前多少天
+        getFormatTimeYesterday: function(time,n) {
+            var t = 7*24*60*60*1000;
+            if(n=='1'){
+                t = 1*24*60*60*1000;
+            }else if(n == '7'){
+                t = 7*24*60*60*1000;
+            };
+            var now = +new Date();
+            var d = (time && new Date(time-t))|| new Date(now-t)
+                year = this.isBelowTen(d.getFullYear()),
+                month = this.isBelowTen(d.getMonth() + 1),
+                day = this.isBelowTen(d.getDate()),
+                hour = this.isBelowTen(d.getHours()),
+                minute = this.isBelowTen(d.getMinutes()),
+                second = this.isBelowTen(d.getSeconds());
+            return year + '' + month + '' + day;
         },
 
         // 时间数字低于10补0，如：9转化为09
