@@ -1,16 +1,16 @@
 /**
  * 全局命名空间对象下挂载方法
- * @date 2015-06-08
- * UpDate 2016-04-07
- * @author Lipeng Wong
+ * @Author: hlp47
+ * @Date:   2015-06-08
+ * @Last Modified by:   Administrator
+ * @Last Modified time: 2016-04-28 15:19:16
  */
-
+//----------------------------------------------------------------------//
 /**
  * 处理命名空间
  * @param {string} 空间名称，可多个 
  * @return {object} 对象
  */
-
 var NB = {
     namespace: function(ns) {
         var parts = ns.split('.'),
@@ -54,10 +54,10 @@ NB.namespace('base');
             destination = source
         } else {
             for (var property in source) {
-                if (getParamType(source[property]).toLowerCase() === "object" ||
-                    getParamType(source[property]).toLowerCase() === "array") {
-                    destination[property] = getParamType(source[property]).toLowerCase() === "object" ? {} : [];
-                    extend(destination[property], source[property]);
+                if (NB.base.getParamType(source[property]).toLowerCase() === "object" ||
+                    NB.base.getParamType(source[property]).toLowerCase() === "array") {
+                    NB.base.destination[property] = NB.base.getParamType(source[property]).toLowerCase() === "object" ? {} : [];
+                    NB.base.extend(destination[property], source[property]);
                 } else {
                     destination[property] = source[property];
                 }
@@ -66,16 +66,28 @@ NB.namespace('base');
     };
 
     /**
+     * 获取对象类型
+     * @private
+     * @param {object} object 对象
+     * @return {string} 类型
+     * 可判断类型：Boolean Number String Function Array Date RegExp Object
+     */
+    NB.base.getParamType = function(obj) {
+        return obj == null ? String(obj) :
+            Object.prototype.toString.call(obj).replace(/\[object\s+(\w+)\]/i, "$1") || "object";
+    }
+
+    /**
      * 原型继承类
      * @param {object} object 基类
      * @return {object} 生成的子类
      */
     NB.base.cloneClass = function(object) {
-        if (!isObject(object)) return object;
+        if (!this.isObject(object)) return object;
         if (object == null) return object;
         var F = new Object();
         for (var i in object) {
-            F[i] = cloneClass(object[i]);
+            F[i] = NB.base.cloneClass(object[i]);
         }
         return F;
     }
@@ -103,12 +115,12 @@ NB.namespace('base');
          */
         isType: function(type) {
             return function(obj) {
-                return {}.toString.call(obj) === "[object " + type + "]";
+                return Object.prototype.toString.call(obj) === "[object " + type + "]";
             }
         },
 
         isArray: function(val) {
-            return Array.isArray(val) || Object.prototype.toString.call(val) === '[object Array]';
+            return Array.isArray(val) || this.isType('Array')(val);
         },
 
         isFunction: function(fn) {
@@ -120,11 +132,13 @@ NB.namespace('base');
         },
 
         isObject: function(val) {
-            return Object.prototype.toString.call(val) === '[object Object]';
+            // return Object.prototype.toString.call(val) === '[object Object]';
+            return this.isType('Object')(val);
         },
 
         isString: function(val) {
-            return Object.prototype.toString.call(val) === '[object String]';
+            // return Object.prototype.toString.call(val) === '[object String]';
+            return this.isType('String')(val);
         },
 
         //update: obj allows all unkonw type
@@ -204,21 +218,39 @@ NB.namespace('base');
                     return arr.length
                 }
             }
+        },
+
+        indexOf: function(arr, ele) {
+            var indexOf = Array.prototype.indexOf;
+            if (indexOf) {
+                return indexOf.call(arr, ele);
+            }
+            for (var i = 0; i < arr.length; i++) {
+                if (arr[i] == ele) {
+                    return i
+                }
+            };
+            return -1
+        },
+
+        /**
+         * @param{array} fArray
+         * @param{array} sArray
+         * merge([12, 354, 6], [689])
+         */
+        merge: function(fArray, sArray) {
+            var f = fArray.length,
+                s = sArray.length,
+                i = 0;
+            for (; i < s; i++) {
+                fArray[f++] = sArray[i++];
+            };
+            fArray.length = f;
+
+            return fArray;
         }
 
     });
-
-    /**
-     * 获取对象类型
-     * @private
-     * @param {object} object 对象
-     * @return {string} 类型
-     * 可判断类型：Boolean Number String Function Array Date RegExp Object
-     */
-    function getParamType(obj) {
-        return obj == null ? String(obj) :
-            Object.prototype.toString.call(obj).replace(/\[object\s+(\w+)\]/i, "$1") || "object";
-    }
 
 })();
 
@@ -267,10 +299,11 @@ NB.namespace('array');
 NB.array = {
 
     //数组去重
+    // deleteRepeatArr([12,345,12,34])===>[12, 345, 34]
     deleteRepeatArr: function(arr) {
         var i, j,
             newArr = [],
-            obj = [],
+            obj = {},
             len = arr.length;
         for (i = 0; i < len; i++) {
             if (!obj[arr[i]]) {
@@ -339,24 +372,25 @@ NB.string = {
     isLowerCase: function(str) {
         return /^[a-z]+$/.test(str)
     },
+
     /**
-     * 英文首字符大写
-     * 调用 NB.string.toLowerCaseFirstLetter('Doglas')
+     * 英文首字符小写
+     * 调用 NB.string.toLowerCaseFirstLetter1('Doglas')
      */
-    // toLowerCaseFirstLetter: function(a){
-    //     if(typeof a === 'undefine' || this.isLowerCase(a.charAt(0))){
-    //         return a
-    //     }else{
-    //         var firstLetter = a.substring(0,1).toLowerCase();
-    //         var otherLetter = a.substring(1, a.length);
-    //         return firstLetter + otherLetter
-    //     }
-    // }
+    toLowerCaseFirstLetter1: function(a) {
+        if (typeof a === 'undefined' || this.isLowerCase(a.charAt(0))) {
+            return a
+        } else {
+            var firstLetter = a.substring(0, 1).toLowerCase();
+            var otherLetter = a.substring(1, a.length);
+            return firstLetter + otherLetter
+        }
+    }
+
     // 简易版
-    toLowerCaseFirstLetter: function(a) {
+        toLowerCaseFirstLetter: function(a) {
         return a.charAt(0).toLowerCase() + a.substring(1, a.length);
-        // or
-        //return a.charAt(0).toLowerCase() + a.slice(1);
+        // or return a.charAt(0).toLowerCase() + a.slice(1);
     },
 
     //html字符转义
@@ -364,7 +398,7 @@ NB.string = {
     encodeHtml: function(str) {
         if (typeof str != 'string') {
             return str;
-        }
+        };
         var entityMap = {
             "&": "&amp;",
             "<": "&lt;",
@@ -373,13 +407,66 @@ NB.string = {
             '"': "&quot;",
             "/": "&#x2F;"
         };
+        var reg = /[&<>'"/]/ig;
         return str.replace(reg, function(i) {
             return entityMap[i];
         });
     }
 };
 
+// cookie 封装插件
 NB.namespace('cookie');
+NB.cookie = {
+    getAllCookie: function() {
+        var cookies = {},
+            cookie = document.cookie,
+            index = 0;
+        if (cookie) {
+            var objs = cookie.split(';');
+            for (var i in objs) {
+                index = objs[i].indexOf('=');
+                cookies[objs[i].substr(0, index)] = objs[i].substr(index + 1, objs[i].length);
+            }
+        }
+        return cookies
+    },
+    get: function(name) {
+        return decodeURIComponent(this.getAllCookie()[name]) || null;
+    },
+    //options maxAge, path, domain, secure
+    set: function(name, val, options) {
+        var cookie = encodeURIComponent(name) + '=' + encodeURIComponent(val);
+        if (options) {
+            if (options.maxAge) {
+                cookie += ';max-age=' + options.maxAge;
+            }
+            if (options.path) {
+                cookie += ';path=' + options.path;
+            }
+            if (options.domain) {
+                cookie += ';domain=' + options.domain;
+            }
+            if (options.secure) {
+                cookie += ';secure';
+            }
+        }
+        document.cookie = cookie;
+        //return cookie;
+    },
+
+    remove: function(name) {
+        if (this.getAllCookie()[name]) {
+            document.cookie = name + '=;max-age=0';
+        }
+    },
+
+    removeAll: function() {
+        var cookie = this.getCookie();
+        for (var i in cookie) {
+            document.cookie = i + '=;max-age=0';
+        }
+    }
+};
 
 /**
  * 获取日期和时间
@@ -427,18 +514,16 @@ NB.namespace('date');
             }
             return result;
         },
-        
+
         //根据日期获取前N天(默认7天)，time时间戳 n表示提前多少天
-        getFormatTimeYesterday: function(time,n) {
-            var t = 7*24*60*60*1000;
-            if(n=='1'){
-                t = 1*24*60*60*1000;
-            }else if(n == '7'){
-                t = 7*24*60*60*1000;
-            };
+        getFormatTimeYesterday: function(time, n) {
+            var t = 7 * 24 * 60 * 60 * 1000;
+            if (n) {
+                t = n * 24 * 60 * 60 * 1000;
+            }
             var now = +new Date();
-            var d = (time && new Date(time-t))|| new Date(now-t)
-                year = this.isBelowTen(d.getFullYear()),
+            var d = (time && new Date(time - t)) || new Date(now - t)
+            year = this.isBelowTen(d.getFullYear()),
                 month = this.isBelowTen(d.getMonth() + 1),
                 day = this.isBelowTen(d.getDate()),
                 hour = this.isBelowTen(d.getHours()),
@@ -494,12 +579,12 @@ NB.namespace('widget');
 (function() {
 
     NB.widget = {
-        
+
         // @param {number} time为时间间隔
         gotoTop: function(time) {
             $('html,body').animate({
                 scrollTop: '0px'
-            }, time-0);
+            }, time - 0);
         }
 
     }
