@@ -385,7 +385,7 @@ NB.string = {
             var otherLetter = a.substring(1, a.length);
             return firstLetter + otherLetter
         }
-    }
+    },
 
     // 简易版
         toLowerCaseFirstLetter: function(a) {
@@ -538,6 +538,27 @@ NB.namespace('date');
                 throw new Error('only number!')
             }
             return n < 10 ? '0' + n : n;
+        },
+
+        /**
+        * 格式化金额为小数点后两位
+        * @param {number} num 
+        * @return {string} format2Percent('0.8578')===>85.78%
+        */
+        format2Percent: function(num){
+            if(num === 0 || num === '0'){
+                return '0.00%';
+            };
+            if(!num || isNaN(num)){
+                return
+            }
+            num = parseFloat(num);
+            num = Math.round(10000*num)/100+'';
+            num+=(num.indexOf('.')==-1)?'.00':'00';
+
+            var result = num.split('.'),
+                i = result[1].substring(0,2);
+            return result[0] + '.'+i+'%';
         }
     }
 
