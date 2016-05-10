@@ -3,7 +3,7 @@
  * @Author: hlp47
  * @Date:   2015-06-08
  * @Last Modified by:   Administrator
- * @Last Modified time: 2016-04-28 15:19:16
+ * @Last Modified time: 2016-05-10 15:38:08
  */
 //----------------------------------------------------------------------//
 /**
@@ -388,7 +388,7 @@ NB.string = {
     },
 
     // 简易版
-        toLowerCaseFirstLetter: function(a) {
+    toLowerCaseFirstLetter: function(a) {
         return a.charAt(0).toLowerCase() + a.substring(1, a.length);
         // or return a.charAt(0).toLowerCase() + a.slice(1);
     },
@@ -521,7 +521,7 @@ NB.namespace('date');
             if (n) {
                 t = n * 24 * 60 * 60 * 1000;
             }
-            var now = +new Date();
+            var now = this.getNow();
             var d = (time && new Date(time - t)) || new Date(now - t)
             year = this.isBelowTen(d.getFullYear()),
                 month = this.isBelowTen(d.getMonth() + 1),
@@ -541,27 +541,31 @@ NB.namespace('date');
         },
 
         /**
-        * 格式化金额为小数点后两位
-        * @param {number} num 
-        * @return {string} format2Percent('0.8578')===>85.78%
-        */
-        format2Percent: function(num){
-            if(num === 0 || num === '0'){
+         * 格式化金额为小数点后两位
+         * @param {number} num
+         * @return {string} format2Percent('0.8578')===>85.78%
+         */
+        format2Percent: function(num) {
+            if (num === 0 || num === '0') {
                 return '0.00%';
             };
-            if(!num || isNaN(num)){
+            if (!num || isNaN(num)) {
                 return
             }
             num = parseFloat(num);
-            num = Math.round(10000*num)/100+'';
-            num+=(num.indexOf('.')==-1)?'.00':'00';
+            num = Math.round(10000 * num) / 100 + '';
+            num += (num.indexOf('.') == -1) ? '.00' : '00';
 
             var result = num.split('.'),
-                i = result[1].substring(0,2);
-            return result[0] + '.'+i+'%';
+                i = result[1].substring(0, 2);
+            return result[0] + '.' + i + '%';
+        },
+        // 获取当前时间戳
+        getNow: function() {
+            return +new Date();
+            // return (new Date()).getTime();
         }
     }
-
 })();
 
 
