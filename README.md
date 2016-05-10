@@ -9,7 +9,7 @@ js常用方法，工具函数，集合框架
 
 
 -------  
-# reset.js
+1.reset.js
 ## 添加几个 array es5方法，并在低级浏览器做兼容 array方法有:  
 forEach(),  
 map(),   
