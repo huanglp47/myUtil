@@ -5,7 +5,18 @@ js常用方法，工具函数，集合框架
 --------
 2.[myEasySlide](https://github.com/huanglp47/myUtil/tree/master/myEasySlide)  
 -------
-为webAPP移动端滑动组件，采用css3 transtion和transform属性。用于公司wap网站
+为webAPP移动端滑动组件，采用css3 transtion和transform属性。用于公司wap网站  
 
+
+-------  
+# 3.[reset.js](https://github.com/huanglp47/myUtil/blob/master/reset.js)
+## 添加几个 array es5方法，并在低级浏览器做兼容 array方法有:  
+forEach(),  
+map(),   
+filter(),  
+every(),  
+some();  
+
+-------
 
 
