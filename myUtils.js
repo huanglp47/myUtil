@@ -3,7 +3,7 @@
  * @Author: hlp47
  * @Date:   2015-06-08
  * @Last Modified by:   Administrator
- * @Last Modified time: 2016-05-10 15:38:08
+ * @Last Modified time: 2016-05-17 09:47:35
  */
 //----------------------------------------------------------------------//
 /**
@@ -591,6 +591,30 @@ NB.json.extend(NB.json, {
         return $.parseJSON(str);
     }
 });
+
+// get: NB.localStorage('aa');
+// set: NB.localStorage('aa','123');
+// remove: NB.removeStorage('aa');
+
+NB.namespace('localStorage');
+NB.localStorage = function(key, val){
+    if('localStorage' in window && window['localStorage']!=null){ //
+        if(arguments.length == 2){
+            localStorage.setItem(key, val);
+        }else{
+            return localStorage.getItem(key);
+        }
+    }else{ //cookie
+        return $.cookie(key,val,{expires: 30,path:'/'});
+    }
+};
+NB.removeStorage = function(key){
+    if('localStorage' in window && window['localStorage']!=null){ //
+        localStorage.removeItem(key);
+    }else{ //cookie
+        return $.cookie(key,'',{expires: '-1',path:'/'});
+    }
+};
 
 
 NB.namespace('event');
