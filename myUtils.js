@@ -3,7 +3,7 @@
  * @Author: hlp47
  * @Date:   2015-06-08
  * @Last Modified by:   Administrator
- * @Last Modified time: 2016-05-17 09:47:35
+ * @Last Modified time: 2016-05-19 15:44:43
  */
 //----------------------------------------------------------------------//
 /**
@@ -411,7 +411,21 @@ NB.string = {
         return str.replace(reg, function(i) {
             return entityMap[i];
         });
-    }
+    },
+    /**
+     * 格式化
+     * @param {object} obj 
+     * @return obj==>str
+     */
+    obj2str: function(obj){
+        var str = ''; 
+        for(var i in obj){
+            if(obj[i] && obj.hasOwnProperty(i)){
+                str += i+'='+obj[i]+'&';
+            }
+        };
+        return str.replace(/&$/g, '')
+    } 
 };
 
 // cookie 封装插件
