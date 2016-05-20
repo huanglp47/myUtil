@@ -3,7 +3,7 @@
  * @Author: hlp47
  * @Date:   2015-06-08
  * @Last Modified by:   Administrator
- * @Last Modified time: 2016-05-19 15:44:43
+ * @Last Modified time: 2016-05-20 09:59:01
  */
 //----------------------------------------------------------------------//
 /**
@@ -264,35 +264,35 @@ NB.base.extend(window, NB.base);
 //     successFn: function(){},
 //     errorFn: function(){}    
 // };
-NB.namespace('ajaxMethod');
+NB.namespace('ajax');
 
 NB.ajax = function(options) {
     if (!options || typeof options != 'object') {
         return
     }
-    var config = {},
-        successFn = options.successFn,
-        errorFn = options.errorFn,
+    var successFn = options.successFn,
+        errorFn = options.errorFn;
 
-        config = NB.base.extend({
+    var config = {
 
-            beforeSend: function() {},
+        beforeSend: function() {},
 
-            success: function(d) {
-                if (d.resultCode == 200) {
-                    successFn && NB.base.isFunction(successFn) && successFn();
-                } else {
-                    console.log(d.errorMsg);
-                }
-            },
-
-            error: function() {
-                errorFn && NB.base.isFunction(errorFn) && errorFn();
+        success: function(d) {
+            if (d.resultCode == 200) {
+                successFn && NB.base.isFunction(successFn) && successFn();
+            } else {
+                console.log(d.errorMsg);
             }
+        },
 
-        }, options);
+        error: function() {
+            errorFn && NB.base.isFunction(errorFn) && errorFn();
+        }
 
-    $.ajax(config); // 后续替换成不依赖jQuery，原生JavaScript TODO....
+    };
+    NB.base.extend(config,options);
+
+    $.ajax(config);
 }
 
 NB.namespace('array');
@@ -417,15 +417,15 @@ NB.string = {
      * @param {object} obj 
      * @return obj==>str
      */
-    obj2str: function(obj){
-        var str = ''; 
-        for(var i in obj){
-            if(obj[i] && obj.hasOwnProperty(i)){
-                str += i+'='+obj[i]+'&';
+    obj2str: function(obj) {
+        var str = '';
+        for (var i in obj) {
+            if (obj[i] && obj.hasOwnProperty(i)) {
+                str += i + '=' + obj[i] + '&';
             }
         };
         return str.replace(/&$/g, '')
-    } 
+    }
 };
 
 // cookie 封装插件
@@ -611,22 +611,22 @@ NB.json.extend(NB.json, {
 // remove: NB.removeStorage('aa');
 
 NB.namespace('localStorage');
-NB.localStorage = function(key, val){
-    if('localStorage' in window && window['localStorage']!=null){ //
-        if(arguments.length == 2){
+NB.localStorage = function(key, val) {
+    if ('localStorage' in window && window['localStorage'] != null) { //
+        if (arguments.length == 2) {
             localStorage.setItem(key, val);
-        }else{
+        } else {
             return localStorage.getItem(key);
         }
-    }else{ //cookie
-        return $.cookie(key,val,{expires: 30,path:'/'});
+    } else { //cookie
+        return $.cookie(key, val, { expires: 30, path: '/' });
     }
 };
-NB.removeStorage = function(key){
-    if('localStorage' in window && window['localStorage']!=null){ //
+NB.removeStorage = function(key) {
+    if ('localStorage' in window && window['localStorage'] != null) { //
         localStorage.removeItem(key);
-    }else{ //cookie
-        return $.cookie(key,'',{expires: '-1',path:'/'});
+    } else { //cookie
+        return $.cookie(key, '', { expires: '-1', path: '/' });
     }
 };
 
