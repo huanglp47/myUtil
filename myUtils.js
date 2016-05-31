@@ -3,7 +3,7 @@
  * @Author: hlp47
  * @Date:   2015-06-08
  * @Last Modified by:   Administrator
- * @Last Modified time: 2016-05-20 09:59:01
+ * @Last Modified time: 2016-05-31 18:17:14
  */
 //----------------------------------------------------------------------//
 /**
@@ -627,6 +627,28 @@ NB.removeStorage = function(key) {
         localStorage.removeItem(key);
     } else { //cookie
         return $.cookie(key, '', { expires: '-1', path: '/' });
+    }
+};
+
+//文件操作相关方法
+NB.namespace('file');
+NB.file = {
+    
+    isImage: function(url){
+        var url = url.split(/[?#]/)[0];
+        return (/\.(png|jpg|jpeg|gif|bmp)$/i).test(url);
+    },
+
+    // test.txt, aaa.min.js
+    getFileExtension: function(filename){
+        var ext = null;
+        var tempArr = filename.split('.');
+        if(tempArr.length==1 || tempArr[0] === ""&& tempArr.length== 2){
+            ext = '';
+        }else{
+            ext = tempArr.pop().toLowerCase(); 
+        }
+        return ext
     }
 };
 
