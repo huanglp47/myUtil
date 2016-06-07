@@ -3,7 +3,7 @@
  * @Author: hlp47
  * @Date:   2015-06-08
  * @Last Modified by:   Administrator
- * @Last Modified time: 2016-05-31 18:17:14
+ * @Last Modified time: 2016-06-07 18:24:22
  */
 //----------------------------------------------------------------------//
 /**
@@ -85,6 +85,9 @@ NB.namespace('base');
     NB.base.cloneClass = function(object) {
         if (!this.isObject(object)) return object;
         if (object == null) return object;
+        if(Object.create){ //原生创造对象
+            return Object.create(object);
+        }
         var F = new Object();
         for (var i in object) {
             F[i] = NB.base.cloneClass(object[i]);
