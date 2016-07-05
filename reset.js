@@ -49,7 +49,7 @@ if (typeof forEach != 'function') {
 // arr.forEach(obj.fn, obj);
 
 // arr.forEach(obj.fn1, obj);
-// console.log(arrySpecial);
+// console.log(arrySpecial)parseArray;
 
 
 // arr.forEach(obj.fn2, obj);
@@ -109,20 +109,20 @@ if (typeof some != 'function') {
     }
 }
 if (typeof every != 'function') {
-    every = function(fn, context) {
-            var returnVal = true;
-            for (var i = 0; i < this.length; i++) {
-                if (returnVal == false) {
-                    break
-                }
-                returnVal = !!fn.call(context, this[i], i, this);
+    every = function (fn, context) {
+        var returnVal = true;
+        for (var i = 0; i < this.length; i++) {
+            if (returnVal == false) {
+                break
             }
-            return returnVal
+            returnVal = !!fn.call(context, this[i], i, this);
         }
-        //}
-        // var sorces = [4, 8, 5, 9, 25, 41];
-        // // var current = 20;
-        // var current = 200;
+        return returnVal
+    }
+    //}
+    // var sorces = [4, 8, 5, 9, 25, 41];
+    // // var current = 20;
+    // var current = 200;
 
     // var aaSome = sorces.some(function(ele) {
     //     return ele > current
@@ -133,5 +133,5 @@ if (typeof every != 'function') {
     //     return ele > 200
     // });
     // console.log(aaEvery);
-
+}
 })();
