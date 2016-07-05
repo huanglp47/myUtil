@@ -3,7 +3,7 @@
  * @Author: hlp47
  * @Date:   2015-06-08
  * @Last Modified by:   Administrator
- * @Last Modified time: 2016-06-07 18:24:22
+ * @Last Modified time: 2016-07-05 15:32:12
  */
 //----------------------------------------------------------------------//
 /**
@@ -85,7 +85,7 @@ NB.namespace('base');
     NB.base.cloneClass = function(object) {
         if (!this.isObject(object)) return object;
         if (object == null) return object;
-        if(Object.create){ //原生创造对象
+        if (Object.create) { //原生创造对象
             return Object.create(object);
         }
         var F = new Object();
@@ -251,8 +251,60 @@ NB.namespace('base');
             fArray.length = f;
 
             return fArray;
-        }
+        },
 
+        autoXSS: (function() {
+            var _XSS = {
+                go: function(item) {
+                    var rs = item;
+                    if (!item) {
+                        return rs;
+                    }
+                    var itemType = typeof(item),
+                        itemObjType;
+                    if (itemType == 'string') {
+                        rs = this.filterHtml(item);
+                    } else if (itemType == 'object') {
+                        if (NB.base.isObject(item)) {
+                            rs = this.parseObject(item);
+                        } else if (NB.base.isArray(item)) {
+                            rs = this.parseArray(item);
+                        }
+                        rs.autoXss = true;
+                    }
+                    return rs;
+                },
+                //the same as 'encodeHtml'
+                filterHtml: function(str) {
+                    str = str.replace(/\u0026/g, '&amp;')
+                        .replace(/\u0022/g, '&quot;')
+                        .replace(/\u003C/g, '&lt;')
+                        .replace(/\u003E/g, '&gt;')
+                        .replace(/\u0027/g, '&#39;');
+                    return str;
+                },
+                parseArray: function(obj) {
+                    var i = 0,
+                        l = obj.length,
+                        item;
+                    for (; i < l; i++) {
+                        obj[i] = this.go(obj[i]);
+                    }
+                    return obj;
+                },
+                parseObject: function(obj) {
+                    for (var key in obj) {
+                        if (obj.hasOwnProperty(key)) {
+                            obj[key] = this.go(obj[key]);
+                        }
+                    }
+                    return obj;
+                }
+            };
+            return function(data) {
+                return _XSS.go(data);
+            }
+        })()
     });
 
 })();
@@ -293,7 +345,7 @@ NB.ajax = function(options) {
         }
 
     };
-    NB.base.extend(config,options);
+    NB.base.extend(config, options);
 
     $.ajax(config);
 }
@@ -415,6 +467,7 @@ NB.string = {
             return entityMap[i];
         });
     },
+
     /**
      * 格式化
      * @param {object} obj 
@@ -603,7 +656,7 @@ NB.namespace('number');
 NB.namespace('json');
 
 //json方法拓展 2016-03-18 //
-NB.json.extend(NB.json, {
+NB.base.extend(NB.json, {
     parse: function(str) {
         return $.parseJSON(str);
     }
@@ -636,20 +689,20 @@ NB.removeStorage = function(key) {
 //文件操作相关方法
 NB.namespace('file');
 NB.file = {
-    
-    isImage: function(url){
+
+    isImage: function(url) {
         var url = url.split(/[?#]/)[0];
         return (/\.(png|jpg|jpeg|gif|bmp)$/i).test(url);
     },
 
     // test.txt, aaa.min.js
-    getFileExtension: function(filename){
+    getFileExtension: function(filename) {
         var ext = null;
         var tempArr = filename.split('.');
-        if(tempArr.length==1 || tempArr[0] === ""&& tempArr.length== 2){
+        if (tempArr.length == 1 || tempArr[0] === "" && tempArr.length == 2) {
             ext = '';
-        }else{
-            ext = tempArr.pop().toLowerCase(); 
+        } else {
+            ext = tempArr.pop().toLowerCase();
         }
         return ext
     }

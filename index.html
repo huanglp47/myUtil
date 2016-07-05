@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>myUtils test</title>
+</head>
+
+<body>
+    <input type="text" id='myInput'>
+    <button type="submit" id="submit">提交</button>
+    <p id='content'></p>
+    <script src="myUtils.js"></script>
+    <script type='text/javascript'>
+    (function() {
+
+        function $(id) {
+            return document.getElementById(id);
+        }
+
+        $('submit').addEventListener('click', function() {
+            var data = $('myInput').value;
+            var d = NB.base.autoXSS(data);
+            $('content').innerHTML = d;
+        }, false);
+
+
+        // var data = ['123','4444&&&'];
+        var data = {'123':'4444&&&','ss':'123'};
+            var d = NB.base.autoXSS(data);
+            $('content').innerHTML = d;
+    })();
+    </script>
+</body>
+
+</html>
