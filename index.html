@@ -26,9 +26,36 @@
 
 
         // var data = ['123','4444&&&'];
-        var data = {'123':'4444&&&','ss':'123'};
-            var d = NB.base.autoXSS(data);
-            $('content').innerHTML = d;
+        var data = {
+            '123': '4444&&&',
+            'ss': '123'
+        };
+        var d = NB.base.autoXSS(data);
+        $('content').innerHTML = d;
+
+
+        function obj2str(obj) {
+
+            var str = '';
+            if (Object.keys && Array.prototype.map) {
+                return Object.keys(obj).map(function(k) {
+                    return encodeURIComponent(k) + '=' + encodeURIComponent(obj[k])
+                }).join('&')
+            } else {
+                for (var i in obj) {
+                    if (obj[i] && obj.hasOwnProperty(i)) {
+                        str += i + '=' + obj[i] + '&';
+                    }
+                };
+                return str.replace(/&$/g, '')
+            }
+        };
+        var obj = {
+            aa: '123',
+            bb: 'qas'
+        }
+        var aa = obj2str(obj);
+        console.log(aa);
     })();
     </script>
 </body>

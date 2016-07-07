@@ -3,7 +3,7 @@
  * @Author: hlp47
  * @Date:   2015-06-08
  * @Last Modified by:   Administrator
- * @Last Modified time: 2016-07-05 15:32:12
+ * @Last Modified time: 2016-07-07 17:49:12
  */
 //----------------------------------------------------------------------//
 /**
@@ -475,12 +475,18 @@ NB.string = {
      */
     obj2str: function(obj) {
         var str = '';
-        for (var i in obj) {
-            if (obj[i] && obj.hasOwnProperty(i)) {
-                str += i + '=' + obj[i] + '&';
-            }
-        };
-        return str.replace(/&$/g, '')
+        if (Object.keys && Array.prototype.map) {
+            return Object.keys(obj).map(function(k) {
+                return encodeURIComponent(k) + '=' + encodeURIComponent(obj[k])
+            }).join('&')
+        } else {
+            for (var i in obj) {
+                if (obj[i] && obj.hasOwnProperty(i)) {
+                    str += i + '=' + obj[i] + '&';
+                }
+            };
+            return str.replace(/&$/g, '')
+        }
     }
 };
 
@@ -675,14 +681,20 @@ NB.localStorage = function(key, val) {
             return localStorage.getItem(key);
         }
     } else { //cookie
-        return $.cookie(key, val, { expires: 30, path: '/' });
+        return $.cookie(key, val, {
+            expires: 30,
+            path: '/'
+        });
     }
 };
 NB.removeStorage = function(key) {
     if ('localStorage' in window && window['localStorage'] != null) { //
         localStorage.removeItem(key);
     } else { //cookie
-        return $.cookie(key, '', { expires: '-1', path: '/' });
+        return $.cookie(key, '', {
+            expires: '-1',
+            path: '/'
+        });
     }
 };
 
